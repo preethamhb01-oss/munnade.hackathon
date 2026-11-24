@@ -1,5 +1,5 @@
 
-'use strict'; // makes JavaScript stricter, so silly mistakes show up early
+'use strict'; 
 
 
 const $  = (sel, root = document) => root.querySelector(sel);
@@ -17,12 +17,12 @@ const store = {
   }
 };
 
-// esc() makes user-typed text safe to put inside HTML (stops <script> tricks).
+
 function esc(text) {
   return String(text).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-// toast("message") pops a small friendly message at the bottom of the screen.
+
 function toast(message) {
   let box = $('#toast');
   if (!box) { box = document.createElement('div'); box.id = 'toast'; box.className = 'toast'; document.body.appendChild(box); }
@@ -46,7 +46,7 @@ function confetti() {
   }
 }
 
-// Animate a progress bar: we set its width a moment AFTER it is on screen, so CSS can slide it.
+
 function fillBars(root = document) {
   requestAnimationFrame(() => setTimeout(() => {
     $$('.bar[data-w]', root).forEach(b => b.style.width = b.dataset.w + '%');
@@ -54,11 +54,8 @@ function fillBars(root = document) {
 }
 
 
-/* =====================================================================
-   1. DATA (the "content" of the prototype)
-   Plain lists of objects. Want to add a career or an opportunity?
-   Copy one block, change the words, save. The pages update by themselves.
-   ===================================================================== */
+
+   
 
 
 const TEAM = [
@@ -68,7 +65,7 @@ const TEAM = [
   { name: 'NehaShree N' }
 ];
 
-/* ---- 1b. Learning Hub subjects ---- */
+
 const SUBJECTS = [
   { id: 'prog', icon: '💻', name: 'Programming Basics',
     desc: 'Learn how computers follow instructions, from your first variable to a small project.',
@@ -213,8 +210,7 @@ const CAREERS = [
     res: [['ICAI', 'https://www.icai.org'], ['SWAYAM', 'https://swayam.gov.in']] }
 ];
 
-/* ---- 1d. Opportunities ---- */
-// levels = who it suits: '10' (10th), '12', 'diploma', 'grad'
+
 const OPPS = [
   { id: 'nsp', type: 'Scholarship', title: 'National Scholarship Portal', org: 'Government of India', levels: ['10', '12', 'diploma', 'grad'],
     elig: 'Many central and state schemes for school and college students. Income, category and marks rules differ for each scheme.',
@@ -261,9 +257,7 @@ const OPPS = [
     elig: 'Aspiring teachers with the required qualification for the class level they want to teach.', apply: 'Apply online on the CTET site when registration opens.', deadline: 'Announced before each exam session.', url: 'https://ctet.nic.in' }
 ];
 
-/* ---- 1e. India tile map ---- */
-// c = column, r = row on the tile grid (a "cartogram": each state is the same size, shaped like India).
-// lit = approximate literacy rate % (Census 2011). Please verify with the latest official data before publishing.
+
 const REGIONS = [
   { id: 'JK', n: 'Jammu & Kashmir', c: 3, r: 0, lit: 67.2, ut: true }, { id: 'LA', n: 'Ladakh', c: 4, r: 0, lit: 77.2, ut: true },
   { id: 'PB', n: 'Punjab', c: 3, r: 1, lit: 75.8 }, { id: 'HP', n: 'Himachal Pradesh', c: 4, r: 1, lit: 82.8 }, { id: 'UK', n: 'Uttarakhand', c: 5, r: 1, lit: 78.8 },
@@ -289,12 +283,12 @@ const NAV = [
   ['india-map.html', 'map', 'India Map'], ['skill-passport.html', 'passport', 'Passport'],
   ['dashboard.html', 'dashboard', 'Dashboard'], ['feedback.html', 'feedback', 'Feedback']
 ];
-const PAGE = document.body.dataset.page; // e.g. "about"
+const PAGE = document.body.dataset.page; 
 
 function buildLayout() {
   const user = store.get('user', null);
 
-  // ---- Header ----
+ 
   const header = $('#site-header');
   if (header) {
     header.className = 'site-header';
@@ -312,7 +306,7 @@ function buildLayout() {
       </div>`;
   }
 
-  // ---- Footer ----
+
   const footer = $('#site-footer');
   if (footer) {
     footer.className = 'site-footer';
@@ -324,7 +318,7 @@ function buildLayout() {
       </div>`;
   }
 
-  // ---- Sign-in modal (a pretend account that lives only in this browser) ----
+
   const modal = document.createElement('div');
   modal.className = 'modal-backdrop';
   modal.id = 'loginModal';
@@ -355,7 +349,7 @@ function buildLayout() {
   });
   document.addEventListener('submit', e => {
     if (e.target.id === 'loginForm') {
-      e.preventDefault(); // stop the page from reloading
+      e.preventDefault(); 
       store.set('user', { name: $('#uname').value.trim(), email: $('#uemail').value.trim() });
       toast('Welcome aboard! 🎉'); confetti(); closeModal();
       setTimeout(() => location.reload(), 900);
@@ -363,7 +357,7 @@ function buildLayout() {
   });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-  // ---- Dark / light theme ----
+ 
   document.documentElement.dataset.theme = store.get('theme', 'light');
   document.addEventListener('click', e => {
     if (e.target.closest('#themeBtn')) {
@@ -374,7 +368,7 @@ function buildLayout() {
   });
 }
 
-// ---- Scroll reveal: elements with class "reveal" fade up when they enter the screen ----
+
 let revealObserver;
 function observeReveals(root = document) {
   if (!revealObserver) {
@@ -385,13 +379,12 @@ function observeReveals(root = document) {
     }, { threshold: 0.12 });
   }
   $$('.reveal:not(.visible)', root).forEach((el, i) => {
-    el.style.setProperty('--d', (i % 6) * 0.08 + 's'); // small stagger so cards appear one after another
+    el.style.setProperty('--d', (i % 6) * 0.08 + 's'); 
     revealObserver.observe(el);
   });
 }
 
-// ---- 3D tilt on cards that follow the mouse ----
-function enableTilt() {
+
   document.addEventListener('mousemove', e => {
     const card = e.target.closest('.tilt');
     $$('.tilt').forEach(c => { if (c !== card) c.style.transform = ''; });
@@ -404,7 +397,7 @@ function enableTilt() {
   document.addEventListener('mouseleave', () => $$('.tilt').forEach(c => c.style.transform = ''));
 }
 
-// ---- Ripple effect on buttons ----
+
 function enableRipple() {
   document.addEventListener('click', e => {
     const btn = e.target.closest('.btn');
@@ -419,7 +412,7 @@ function enableRipple() {
   });
 }
 
-// ---- Fade the page out before moving to another page of our own site ----
+
 function enablePageTransitions() {
   document.addEventListener('click', e => {
     const a = e.target.closest('a[href]');
@@ -432,17 +425,17 @@ function enablePageTransitions() {
   });
 }
 
-// ---- Counting-up numbers ----
+
 function countUp(el, target) {
   const start = performance.now(), duration = 1400;
   (function frame(now) {
     const t = Math.min((now - start) / duration, 1);
-    el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3))); // ease-out curve
+    el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3))); 
     if (t < 1) requestAnimationFrame(frame);
   })(start);
 }
 
-// ---- Team cards (used on Home and the Closing page) ----
+
 function renderTeam() {
   const mount = $('#team-mount');
   if (!mount) return;
@@ -454,7 +447,7 @@ function renderTeam() {
   observeReveals(mount);
 }
 
-// ---- Remember visits (for the streak on the dashboard) and the last page ----
+
 function trackVisit() {
   const today = new Date().toISOString().slice(0, 10);
   const days = store.get('visits', []);
@@ -469,11 +462,9 @@ function visitStreak() {
 }
 
 
-/* =====================================================================
-   3. PAGE: HOME
-   ===================================================================== */
+
 function initHome() {
-  // Typing effect in the hero heading
+ 
   const el = $('#typed');
   if (el) {
     const words = ['learn.', 'grow.', 'explore.', 'unlock.'];
@@ -487,7 +478,7 @@ function initHome() {
       else { deleting = false; w = (w + 1) % words.length; setTimeout(tick, 300); }
     })();
   }
-  // Counters read their numbers from our data lists, so they're always honest.
+ 
   const numbers = { careers: CAREERS.length, opps: OPPS.length, subjects: SUBJECTS.length, regions: REGIONS.length };
   $$('.count').forEach(c => {
     const obs = new IntersectionObserver(([en]) => { if (en.isIntersecting) { countUp(c, numbers[c.dataset.key]); obs.disconnect(); } });
@@ -496,20 +487,17 @@ function initHome() {
 }
 
 
-/* =====================================================================
-   4. PAGE: SMART LEARNING HUB
-   ===================================================================== */
+
 function initLearn() {
   const app = $('#hub-app');
   let lang = store.get('lang', 'en');
   let subjectId = store.get('subject', SUBJECTS[0].id);
-  let quiz = null; // holds the running quiz: { i: question number, score, answered }
-  const t = key => (I18N[lang] && I18N[lang][key]) || I18N.en[key]; // translate a label
+  let quiz = null;
+  const t = key => (I18N[lang] && I18N[lang][key]) || I18N.en[key]; 
 
   const subject = () => SUBJECTS.find(s => s.id === subjectId);
-  const plans = () => store.get('plans', {});          // { subjectId: { weeks:[...] } }
-  const scores = () => store.get('quizBest', {});      // { subjectId: bestScore }
-
+  const plans = () => store.get('plans', {});         
+  const scores = () => store.get('quizBest', {});   
   function render() {
     const s = subject();
     const plan = plans()[s.id];
@@ -553,7 +541,7 @@ function initLearn() {
     observeReveals(app);
   }
 
-  // Build the study plan: spread the subject's topics evenly across the chosen weeks.
+ 
   function makePlan(weeks, hours) {
     const topics = subject().topics, n = topics.length, list = [];
     for (let i = 0; i < weeks; i++) {
@@ -572,7 +560,7 @@ function initLearn() {
         <span><b>${w.title}</b> · ~${w.hours} hrs<p>${w.topics.join(' · ')}</p></span></label>`).join('')}`;
   }
 
-  // Quiz: show start button, then one question at a time, then the result.
+  
   function quizHTML() {
     const s = subject();
     if (!quiz) return `<p>${s.quiz.length} quick questions. No pressure, it's just practice.</p><button class="btn btn-primary" id="startQuiz">${t('start')}</button>`;
@@ -588,7 +576,8 @@ function initLearn() {
       <button class="btn btn-ghost hidden" id="nextQ">${quiz.i === s.quiz.length - 1 ? t('finish') : t('next')} →</button>`;
   }
 
-  // ---- Listen for clicks anywhere inside the hub (event delegation) ----
+ 
+  
   app.addEventListener('click', e => {
     const card = e.target.closest('.subject-card');
     if (card) { subjectId = card.dataset.id; store.set('subject', subjectId); quiz = null; render(); return; }
@@ -622,7 +611,7 @@ function initLearn() {
   });
   app.addEventListener('change', e => {
     if (e.target.id === 'langSel') { lang = e.target.value; store.set('lang', lang); render(); }
-    if (e.target.dataset.week !== undefined) {            // a week checkbox was ticked
+    if (e.target.dataset.week !== undefined) {            
       const all = plans(); all[subjectId].weeks[+e.target.dataset.week].done = e.target.checked; store.set('plans', all);
       $('#planOut').innerHTML = planHTML(all[subjectId]); fillBars(app);
       if (all[subjectId].weeks.every(w => w.done)) { confetti(); toast('Plan complete! 🏆'); }
@@ -632,11 +621,7 @@ function initLearn() {
 }
 
 
-/* =====================================================================
-   5. PAGE: AI CAREER NAVIGATOR
-   NOTE: this is a "rule-based" demo, not a real AI model.
-   It scores each career using what the visitor tells us.
-   ===================================================================== */
+
 function initCareer() {
   const app = $('#career-app');
   const saved = store.get('careerProfile', { edu: '12', pref: 'any', interests: [], skills: '' });
@@ -660,7 +645,7 @@ function initCareer() {
     </form>
     <div id="careerOut" style="margin-top:1.6rem"></div>`;
 
-  // Toggle interest chips on/off
+  
   $('#interestChips').addEventListener('click', e => {
     const chip = e.target.closest('.chip'); if (!chip) return;
     chip.classList.toggle('active');
@@ -674,7 +659,7 @@ function initCareer() {
     const profile = { edu: $('#edu').value, pref: $('#pref').value, interests: [...chosen], skills: $('#skills').value };
     store.set('careerProfile', profile);
 
-    // A little "thinking" animation so it feels alive
+  
     $('#careerOut').innerHTML = '<div class="thinking"><i></i><i></i><i></i></div><p class="center">Exploring directions for you…</p>';
     setTimeout(() => showResults(profile), 1300);
   });
@@ -711,14 +696,12 @@ function initCareer() {
     toast('Here are your career directions 🧭');
   }
 
-  // If they already got results earlier, remind them gently
+ 
   if (store.get('careerResults', []).length) $('#careerOut').innerHTML = '<p class="center">👆 Update your answers and press the button to refresh your suggestions.</p>';
 }
 
 
-/* =====================================================================
-   6. PAGE: OPPORTUNITIES (filter + search + save)
-   ===================================================================== */
+
 function initOpps() {
   const app = $('#opps-app');
   const types = [...new Set(OPPS.map(o => o.type))];
@@ -768,12 +751,10 @@ function initOpps() {
 }
 
 
-/* =====================================================================
-   7. PAGE: INDIA MAP (interactive tile map)
-   ===================================================================== */
+
 function initMap() {
   const app = $('#map-app');
-  let lens = 'lit';       // 'lit' = literacy heat colours, 'focus' = opportunity focus colours
+  let lens = 'lit';       
   let selected = null;
 
   const tier = lit => lit < 70 ? 0 : lit < 80 ? 1 : 2;
@@ -782,7 +763,7 @@ function initMap() {
     { colour: '#f5a524', label: 'Skills & scholarships', text: 'Close to the national picture. Skill-development programmes, scholarships and career guidance can help turn education into opportunity.' },
     { colour: '#14b8a6', label: 'Advanced pathways & jobs', text: 'Strong literacy levels. The focus can shift to education quality, higher-education access, jobs and skills that match them.' }
   ];
-  // Heat colour: low literacy = warm orange, high = cool teal
+  
   const heat = lit => `hsl(${Math.round(20 + Math.min(Math.max((lit - 60) / 35, 0), 1) * 140)} 65% 45%)`;
   const ranked = [...REGIONS].sort((a, b) => b.lit - a.lit);
 
@@ -832,9 +813,7 @@ function initMap() {
 }
 
 
-/* =====================================================================
-   8. PAGE: SKILL PASSPORT
-   ===================================================================== */
+
 function initPassport() {
   const app = $('#passport-app');
   const blank = { name: '', headline: '', skills: [], projects: [], certs: [], wins: [] };
@@ -890,7 +869,7 @@ function initPassport() {
       ${section('🏆 Achievements', 'wins', w => `<div>${esc(w.t)}</div>`)}`;
     fillBars($('#passportCard'));
   }
-  // Builds one section of the passport card, with a small ✕ remove button for each entry
+ 
   function section(title, key, fmt, inline) {
     if (!data[key].length) return `<p style="margin-top:1rem"><strong>${title}</strong><br><small>Nothing yet. Add your first one!</small></p>`;
     return `<p style="margin:1rem 0 .3rem"><strong>${title}</strong></p>` +
@@ -921,7 +900,7 @@ function initPassport() {
   });
   $('#printBtn').addEventListener('click', () => window.print());
   $('#dlBtn').addEventListener('click', () => {
-    // Build a plain-text version and offer it as a file download (a Blob = an in-memory file)
+   
     const lines = [`UnlockED Skill Passport`, `Name: ${data.name}`, `${data.headline}`, '',
       'SKILLS', ...data.skills.map(s => `- ${s.n} (${LEVELS[s.l]})`), '',
       'PROJECTS', ...data.projects.map(p => `- ${p.n}: ${p.d} ${p.link}`), '',
@@ -935,10 +914,7 @@ function initPassport() {
 }
 
 
-/* =====================================================================
-   9. PAGE: STUDENT DASHBOARD
-   Reads everything the other pages saved and shows it in one place.
-   ===================================================================== */
+
 function initDashboard() {
   const app = $('#dash-app');
   const user = store.get('user', null);
@@ -986,9 +962,7 @@ function initDashboard() {
 }
 
 
-/* =====================================================================
-   10. PAGE: FEEDBACK
-   ===================================================================== */
+
 function initFeedback() {
   const app = $('#feedback-app');
   let rating = 0;
@@ -1038,19 +1012,13 @@ function initFeedback() {
 }
 
 
-/* =====================================================================
-   11. PAGE: CLOSING DEMO
-   ===================================================================== */
+
 function initClosing() {
   const btn = $('#replay');
   if (btn) btn.addEventListener('click', () => { confetti(); toast('UnlockED – your potential, your future ✨'); });
 }
 
 
-/* =====================================================================
-   12. START EVERYTHING
-   Run the shared features on every page, then the code for THIS page only.
-   ===================================================================== */
 buildLayout();
 trackVisit();
 enableTilt();
@@ -1065,4 +1033,4 @@ const PAGE_STARTERS = {
 };
 if (PAGE_STARTERS[PAGE]) PAGE_STARTERS[PAGE]();
 
-observeReveals(); // make every .reveal element fade in when scrolled into view
+observeReveals(); 
